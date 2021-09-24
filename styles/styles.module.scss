@@ -2,6 +2,7 @@ $dark-gray: #1d1d1e;
 $gray: hsla(0, 0%, 100%, 0.4);
 $gray-light: #2e2d2e;
 $active-green: #85be85;
+$red: rgb(220, 116, 116);
 
 .overview {
   min-height: 100vh;
@@ -16,6 +17,12 @@ $active-green: #85be85;
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    .loaderContainer {
+      display: flex;
+      align-items: center;
+      margin: 25px 0;
+    }
     .mainTitle {
       margin: 15px 0;
       text-align: center;
@@ -64,6 +71,57 @@ $active-green: #85be85;
     &:hover {
       border-bottom: 1px solid $active-green;
       color: $active-green;
+    }
+  }
+}
+
+.table {
+  margin: 35px 0;
+  width: 100%;
+  max-width: 1450px;
+  border-collapse: collapse;
+
+  tbody {
+    td {
+      padding: 25px 0 !important;
+    }
+  }
+
+  tr,
+  th {
+    padding: 10px 0;
+  }
+
+  thead {
+    th:first-child {
+      border-top-left-radius: 5px;
+    }
+
+    th:last-child {
+      border-top-right-radius: 5px;
+    }
+  }
+
+  th {
+    background: $gray-light;
+  }
+
+  tr {
+    text-align: center;
+    .lastHour {
+      color: $active-green;
+    }
+
+    td {
+      padding: 10px 0;
+      font-size: 16px;
+      border-top: 1px solid $gray;
+      prefix: "%";
+      &.negative {
+        span {
+          color: $red;
+        }
+      }
     }
   }
 }

@@ -1,24 +1,34 @@
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styles from "../styles/styles.module.scss";
-import { getCoinsData } from "../api";
 import NavBar from "../components/NavBar";
 import Select from "react-select";
+import Table from "../components/Table";
+import Loader from "react-loader-spinner";
 
 export default function Home() {
+  const [data, setData] = useState([]);
+  const [period, setPeriod] = useState("24h");
+  const [loading, setLoading] = useState(true);
+
+  const fetchCoinData = async () => {
+    setLoading(true);
+    await axios
+      .get(`http://localhost:3000/api?period=${period}`)
+      .then((res) => setData(res.data.data.slice(0, 150)))
+      .catch((err) => console.log(err.response));
+    setLoading(false);
+  };
+
   useEffect(async () => {
-    const data = await axios
-      .get(
-        "https://coin360.com/api/coins/custom?currency=USD&updates_from=1629895226&period=24h&start=1610443814&end=1624613414&no_charts=true"
-      )
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+    await fetchCoinData();
   }, []);
 
   const options = [
-    { value: "chocolate", label: "Chocolate" },
-    { value: "strawberry", label: "Strawberry" },
-    { value: "vanilla", label: "Vanilla" },
+    { value: "1h", label: "Last 1 Hour" },
+    { value: "24h", label: "Last 24 Hours" },
+    { value: "7d", label: "Last 7 Days" },
+    { value: "30d", label: "Last 30 Days" },
   ];
 
   const customStyles = {
@@ -33,6 +43,11 @@ export default function Home() {
     }),
   };
 
+  const setNewPeriod = async (e) => {
+    setPeriod(e.value);
+    await fetchCoinData();
+  };
+
   return (
     <div className={styles.overview}>
       <NavBar />
@@ -42,12 +57,20 @@ export default function Home() {
           <p>Choose from dropdown to display coins</p>
         </div>
         <Select
-          value={"123"}
-          onChange={(e) => console.log(e)}
+          id="period"
+          defaultValue={{ value: "1h", label: "Last 1 Hour" }}
+          onChange={(e) => setNewPeriod(e)}
           options={options}
           className={styles.select}
           styles={customStyles}
         />
+        {loading ? (
+          <div className={styles.loaderContainer}>
+            <Loader type="TailSpin" color="#fff" height={150} width={150} />
+          </div>
+        ) : (
+          <Table data={data && data} period={period} />
+        )}
       </div>
     </div>
   );
