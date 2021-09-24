@@ -1,5 +1,5 @@
 ## Test Task Table for Coin360
-![alt text]https://coin360.com/assets/ui_elements/Coin360_Press_Kit_horizontal-white.svg)
+![alt text](https://findvectorlogo.com/wp-content/uploads/2019/11/coin360-vector-logo.png)
 
 # Start the Project
 1. Clone the repo
